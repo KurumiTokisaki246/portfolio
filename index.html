@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dexter S. Villegas - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8B9D6F, #5A6B47);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 51, 51, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover {
+            color: #8B9D6F;
+        }
+
+        /* Section Animation */
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(135deg, #1a3333 0%, #2d4d4d 100%);
+        }
+
+        .hero-container {
+            max-width: 900px;
+            width: 100%;
+            background: linear-gradient(to right, #1a3333 50%, #8B9D6F 50%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+        }
+
+        .hero-left {
+            padding: 3rem;
+            color: white;
+            position: relative;
+        }
+
+        .hero-left h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-left h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .hero-left h3 {
+            font-size: 1.2rem;
+            color: #8B9D6F;
+            margin-bottom: 1rem;
+        }
+
+        .profile-image {
+            position: absolute;
+            right: -100px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 8px solid white;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-right {
+            padding: 3rem 3rem 3rem 6rem;
+            background: #8B9D6F;
+        }
+
+        .about-btn {
+            background: #1a3333;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .about-text {
+            color: #1a3333;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Skills Section */
+        #skills {
+            background: #f5f5f5;
+        }
+
+        .skills-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .skills-left h2 {
+            color: #1a3333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-item label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #1a3333, #8B9D6F);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .skills-right h2 {
+            color: #1a3333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .experience-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .experience-item:last-child {
+            border-bottom: none;
+        }
+
+        .exp-header {
+            background: #8B9D6F;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+
+        .exp-title {
+            font-weight: bold;
+            color: #1a3333;
+            margin-bottom: 0.5rem;
+        }
+
+        .exp-bullets {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .exp-bullets li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .exp-bullets li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #8B9D6F;
+        }
+
+        /* Languages Section */
+        #languages {
+            background: #1a3333;
+        }
+
+        .lang-container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .lang-container h2 {
+            color: #1a3333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .lang-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .lang-circle {
+            text-align: center;
+        }
+
+        .circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 8px solid #8B9D6F;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1a3333;
+            margin: 0 auto 1rem;
+            position: relative;
+            background: white;
+        }
+
+        .lang-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Certificates Section */
+        #certificates {
+            background: #f5f5f5;
+        }
+
+        .cert-container {
+            max-width: 1100px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .cert-container h2 {
+            color: #1a3333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .cert-card {
+            background: linear-gradient(135deg, #1a3333, #2d4d4d);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .cert-card h3 {
+            margin-bottom: 0.5rem;
+            color: #8B9D6F;
+        }
+
+        .cert-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .cert-details {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .cert-details.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        /* Projects Section */
+        #projects {
+            background: #1a3333;
+        }
+
+        .project-container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-container h2 {
+            color: #1a3333;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+            border-left: 4px solid #8B9D6F;
+        }
+
+        .project-card:hover {
+            transform: scale(1.05);
+        }
+
+        .project-card h3 {
+            color: #1a3333;
+            margin-bottom: 1rem;
+        }
+
+        .project-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .project-link {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #1a3333, #2d4d4d);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .project-link:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #8B9D6F, #6a7d50);
+        }
+
+        /* Contact Section */
+        #contact {
+            background: #f5f5f5;
+        }
+
+        .contact-container {
+            max-width: 900px;
+            width: 100%;
+            background: linear-gradient(to right, #1a3333 50%, white 50%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .contact-left {
+            padding: 3rem;
+            color: white;
+        }
+
+        .contact-left h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #8B9D6F;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            color: #8B9D6F;
+            font-size: 1.5rem;
+            width: 30px;
+        }
+
+        .contact-right {
+            padding: 3rem;
+            background: white;
+        }
+
+        .contact-right h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1a3333;
+        }
+
+        .contact-right p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-container,
+            .skills-grid,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-image {
+                position: static;
+                transform: none;
+                margin: 2rem auto;
+            }
+
+            .hero-right {
+                padding: 3rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <nav>
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#skills">Skills & Experience</a></li>
+            <li><a href="#languages">Languages</a></li>
+            <li><a href="#certificates">Certificates</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-container">
+            <div class="hero-left">
+                <h1>Dexter</h1>
+                <h2>Villegas</h2>
+                <h3>Graphic Designer</h3>
+                <div class="profile-image">
+                    <img src="3880afda-f53b-4734-8587-8ba416fad950.jpg" alt="Profile Photo">
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="about-btn">About Me</div>
+                <div class="about-text">
+                    Creative and detail-oriented graphic designer with 4 years of experience in developing 
+                    innovative designs for print and digital media. Proficient in coordinating and executing 
+                    functional branding strategies, managing multiple projects to deliver impeccably results on time and 
+                    within budget.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills & Experience Section -->
+    <section id="skills">
+        <div class="skills-container">
+            <div class="skills-grid">
+                <div class="skills-left">
+                    <h2>Skills</h2>
+                    <div class="skill-item">
+                        <label>
+                            <span>Graphic Design</span>
+                            <span>90%</span>
+                        </label>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <label>
+                            <span>Typography</span>
+                            <span>85%</span>
+                        </label>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <label>
+                            <span>UI/UX Design</span>
+                            <span>88%</span>
+                        </label>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="88"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <label>
+                            <span>Print & Digital Media</span>
+                            <span>84%</span>
+                        </label>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="84"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <label>
+                            <span>Project Management</span>
+                            <span>92%</span>
+                        </label>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-width="92"></div>
+                        </div>
+                    </div>
+
+                    <h2 style="margin-top: 2rem;">Education</h2>
+                    <div class="experience-item">
+                        <div class="exp-title">Babo pangulo elementary</div>
+                        <p style="color: #666; font-size: 0.9rem;">school- SY 2011-2016</p>
+                     <div class="exp-title">Porac National High</div>
+                        <p style="color: #666; font-size: 0.9rem;">School - SY 2016-2021</p>
+                    <div class="exp-title">Santa Rita College </div>
+                        <p style="color: #666; font-size: 0.9rem;">School - SY 2025-2026</p>
+                </div>
+
+                </div>
+    </section>
+
+    <!-- Languages Section -->
+    <section id="languages">
+        <div class="lang-container">
+            <h2>Languages</h2>
+            <div class="lang-grid">
+                <div class="lang-circle">
+                    <div class="circle">94%</div>
+                    <div class="lang-name">Filipino</div>
+                </div>
+                <div class="lang-circle">
+                    <div class="circle">86%</div>
+                    <div class="lang-name">English</div>
+                </div>
+                <div class="lang-circle">
+                    <div class="circle">94%</div>
+                    <div class="lang-name">Korean</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section id="certificates">
+        <div class="cert-container">
+            <h2>Certifications</h2>
+            <div class="cert-grid">
+                <div class="cert-card" onclick="toggleCert(this)">
+                    <h3>PMI Certificate</h3>
+                    <p>Click to view details</p>
+                    <div class="cert-details">
+                         <img src="3a2b0674-9161-4dd9-a2b5-638af9187841.jpg" alt="Certificate Image" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+                        <p><strong>Issued:</strong> January 2024</p>
+                    </div>
+                </div>
+
+                <div class="cert-card" onclick="toggleCert(this)">
+                    <h3>certificate of apriciation</h3>
+                    <p>Click to view details</p>
+                    <div class="cert-details">
+                         <img src="4aa8d09b-2882-47f3-8160-6d94d6d69098.jpg" alt="Certificate Image" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+                        <p>Comprehensive certification in user experience design principles and methodologies.</p>
+                    </div>
+                </div>
+
+                <div class="cert-card" onclick="toggleCert(this)">
+                    <h3>Certificate of Attendance</h3>
+                    <p>Click to view details</p>
+                    <div class="cert-details">
+                         <img src="8df4822a-9a8e-488b-81ff-5ba6427e7f12.jpg" alt="Certificate Image" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+                        <p>Specialized training in digital marketing strategies and brand development.</p>
+                    </div>
+                </div>
+
+                <div class="cert-card" onclick="toggleCert(this)">
+                    <h3>Certificate of Apriciation</h3>
+                    <p>Click to view details</p>
+                    <div class="cert-details">
+                        <img src="47ee737d-f5a8-4a38-8b9c-5ef75ec2bbba.jpg" alt="Certificate Image" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+                        <p>Professional web design certification covering responsive design and modern frameworks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="project-container">
+            <h2>My Projects</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3>ETAPKE</h3>
+                    <p>RFID Enabled Ingress and Egress Monitoring System for SRC Library.</p>
+                    <a href="https://etapke.com" class="project-link" target="_blank">View Project</a>
+                </div>
+
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="contact-container">
+            <div class="contact-left">
+                <h2>Contact Me</h2>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+639-15799-6274</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>villegaspandek@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-globe"></i>
+                    <span>www.reallygreatsite.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-linkedin"></i>
+                    <span>linkedin.com/morganmaxwell</span>
+                </div>
+            </div>
+            <div class="contact-right">
+                <h2>Get In Touch</h2>
+                <p>
+                    I'm always interested in hearing about new projects and opportunities. 
+                    Whether you have a question or just want to say hello, feel free to reach out. 
+                    I'll do my best to get back to you as soon as possible!
+                </p>
+                <p style="margin-top: 1rem;">
+                    Looking forward to collaborating with you on your next creative project.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Scroll indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('scrollIndicator').style.width = scrolled + '%';
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate skill bars
+                    if (entry.target.id === 'skills') {
+                        const skillBars = entry.target.querySelectorAll('.skill-progress');
+                        skillBars.forEach(bar => {
+                            const width = bar.getAttribute('data-width');
+                            setTimeout(() => {
+                                bar.style.width = width + '%';
+                            }, 300);
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Toggle certificate details
+        function toggleCert(element) {
+            const details = element.querySelector('.cert-details');
+            const allDetails = document.querySelectorAll('.cert-details');
+            
+            allDetails.forEach(detail => {
+                if (detail !== details) {
+                    detail.classList.remove('show');
+                }
+            });
+            
+            details.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
