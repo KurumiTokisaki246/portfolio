@@ -200,17 +200,54 @@
         }
 
         .skill-bar {
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
 
-        .skill-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #1a3333, #8B9D6F);
-            border-radius: 10px;
-            transition: width 1s ease;
+.skill-progress {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #1a3333, #8B9D6F, #b4c28d);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(139,157,111,0.8);
+    animation: glow 2s ease-in-out infinite alternate;
+    position: relative;
+    transition: width 1.5s ease-out;
+}
+
+.skill-progress::after {
+    content: attr(data-width) '%';
+    position: absolute;
+    right: 10px;
+    top: -25px;
+    color: #1a3333;
+    font-weight: bold;
+    font-size: 0.85rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* When visible, animate percentage label */
+.skill-progress.visible::after {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Glow animation effect */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px rgba(139,157,111,0.6);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(139,157,111,1);
+    }
+}
+
         }
 
         .skills-right h2 {
@@ -779,16 +816,17 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     
-                    // Animate skill bars
-                    if (entry.target.id === 'skills') {
-                        const skillBars = entry.target.querySelectorAll('.skill-progress');
-                        skillBars.forEach(bar => {
-                            const width = bar.getAttribute('data-width');
-                            setTimeout(() => {
-                                bar.style.width = width + '%';
-                            }, 300);
-                        });
-                    }
+                                    // Animate skill bars
+if (entry.target.id === 'skills') {
+    const skillBars = entry.target.querySelectorAll('.skill-progress');
+    skillBars.forEach((bar, index) => {
+        const width = bar.getAttribute('data-width');
+        setTimeout(() => {
+            bar.style.width = width + '%';
+            bar.classList.add('visible'); // Show floating percentage
+        }, 300 + index * 150); // Stagger animation for each bar
+    });
+}
                 }
             });
         }, observerOptions);
@@ -821,4 +859,5 @@
         }
     </script>
 </body>
+
 </html>
