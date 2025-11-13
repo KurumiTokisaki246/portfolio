@@ -248,7 +248,6 @@
     }
 }
 
-        }
 
         .skills-right h2 {
             color: #1a3333;
@@ -816,7 +815,7 @@
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     
-                                    // Animate skill bars
+                    // Animate skill bars
 if (entry.target.id === 'skills') {
     const skillBars = entry.target.querySelectorAll('.skill-progress');
     skillBars.forEach((bar, index) => {
@@ -827,6 +826,7 @@ if (entry.target.id === 'skills') {
         }, 300 + index * 150); // Stagger animation for each bar
     });
 }
+
                 }
             });
         }, observerOptions);
@@ -859,5 +859,4 @@ if (entry.target.id === 'skills') {
         }
     </script>
 </body>
-
 </html>
